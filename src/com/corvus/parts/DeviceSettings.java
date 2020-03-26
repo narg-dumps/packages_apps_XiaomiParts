@@ -117,7 +117,6 @@ public class DeviceSettings extends PreferenceFragment implements
 
         SwitchPreference usbfastCharger = (SwitchPreference) findPreference(PREF_USB_FASTCHARGE);
         usbfastCharger.setEnabled(FileUtils.fileWritable(USB_FASTCHARGE_PATH));
-        usbfastCharger.setChecked(FileUtils.getFileValueAsBoolean(USB_FASTCHARGE_PATH, true));
         usbfastCharger.setOnPreferenceChangeListener(this);
 
         Preference kcal = findPreference(PREF_DEVICE_KCAL);
