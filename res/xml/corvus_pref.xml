@@ -89,16 +89,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/other_category" >
-        <SwitchPreference
-            android:key="fastcharge"
-            android:defaultValue="false"
-            android:title="@string/fastcharge_title"
-            android:icon="@drawable/ic_fastcharge"
-            android:summary="@string/fastcharge_summary" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:key="torch"
         android:title="@string/torch_category">
         <com.corvus.parts.preferences.CustomSeekBarPreference

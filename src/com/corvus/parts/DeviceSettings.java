@@ -55,9 +55,6 @@ public class DeviceSettings extends PreferenceFragment implements
     private static final String TORCH_2_BRIGHTNESS_PATH = "/sys/devices/soc/800f000.qcom," +
             "spmi/spmi-0/spmi0-03/800f000.qcom,spmi:qcom,pm660l@3:qcom,leds@d300/leds/led:torch_1/max_brightness";
 
-    public static final String PREF_USB_FASTCHARGE = "fastcharge";
-    public static final String USB_FASTCHARGE_PATH = "/sys/kernel/fast_charge/force_fast_charge";
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.corvus_pref, rootKey);
@@ -107,17 +104,11 @@ public class DeviceSettings extends PreferenceFragment implements
         PreferenceCategory displayCategory = (PreferenceCategory) findPreference(CATEGORY_DISPLAY);
 
         SecureSettingSwitchPreference backlightDimmer = (SecureSettingSwitchPreference) findPreference(PREF_BACKLIGHT_DIMMER);
-        backlightDimmer.setEnabled(BacklightDimmer.isSupported());
-        backlightDimmer.setChecked(BacklightDimmer.isCurrentlyEnabled(this.getContext()));
-        backlightDimmer.setOnPreferenceChangeListener(new BacklightDimmer(getContext()));
+        backlightDimmer.setOnPreferenceChangeListener(new BacklightDimmer());
 
         SwitchPreference fpsInfo = (SwitchPreference) findPreference(PREF_KEY_FPS_INFO);
         fpsInfo.setChecked(prefs.getBoolean(PREF_KEY_FPS_INFO, false));
         fpsInfo.setOnPreferenceChangeListener(this);
-
-        SwitchPreference usbfastCharger = (SwitchPreference) findPreference(PREF_USB_FASTCHARGE);
-        usbfastCharger.setEnabled(FileUtils.fileWritable(USB_FASTCHARGE_PATH));
-        usbfastCharger.setOnPreferenceChangeListener(this);
 
         Preference kcal = findPreference(PREF_DEVICE_KCAL);
         kcal.setOnPreferenceClickListener(preference -> {
@@ -190,10 +181,6 @@ public class DeviceSettings extends PreferenceFragment implements
                 } else {
                     this.getContext().stopService(fpsinfo);
                 }
-                break;
-
-            case PREF_USB_FASTCHARGE:
-                FileUtils.setValue(USB_FASTCHARGE_PATH, (boolean) value);
                 break;
 
             default:
