@@ -103,8 +103,13 @@ public class DeviceSettings extends PreferenceFragment implements
 
         PreferenceCategory displayCategory = (PreferenceCategory) findPreference(CATEGORY_DISPLAY);
 
-        SecureSettingSwitchPreference backlightDimmer = (SecureSettingSwitchPreference) findPreference(PREF_BACKLIGHT_DIMMER);
-        backlightDimmer.setOnPreferenceChangeListener(new BacklightDimmer());
+        if (FileUtils.fileWritable(BACKLIGHT_DIMMER_PATH)) {
+            SecureSettingSwitchPreference backlightdimmer = (SecureSettingSwitchPreference) findPreference(PREF_BACKLIGHT_DIMMER);
+            backlightdimmer.setChecked(FileUtils.getFileValueAsBoolean(BACKLIGHT_DIMMER_PATH, false));
+            backlightdimmer.setOnPreferenceChangeListener(this);
+        } else {
+            getPreferenceScreen().removePreference(findPreference(PREF_BACKLIGHT_DIMMER));
+        }
 
         SwitchPreference fpsInfo = (SwitchPreference) findPreference(PREF_KEY_FPS_INFO);
         fpsInfo.setChecked(prefs.getBoolean(PREF_KEY_FPS_INFO, false));
@@ -173,6 +178,7 @@ public class DeviceSettings extends PreferenceFragment implements
                     DiracService.sDiracUtils.setLevel(String.valueOf(value));
                 }
                 break;
+
             case PREF_KEY_FPS_INFO:
                 boolean enabled = (Boolean) value;
                 Intent fpsinfo = new Intent(this.getContext(), FPSInfoService.class);
@@ -183,6 +189,9 @@ public class DeviceSettings extends PreferenceFragment implements
                 }
                 break;
 
+            case PREF_BACKLIGHT_DIMMER:
+                FileUtils.setValue(BACKLIGHT_DIMMER_PATH, (boolean) value);
+                break;
             default:
                 break;
         }
