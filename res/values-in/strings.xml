@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="corvus_parts_title">Corvus Parts</string>
+
+    <!-- Category Title -->
+    <string name="audio_category">Suara</string>
+    <string name="display_category">Layar</string>
+    <string name="torch_category">Senter</string>
+    <string name="vibration_category">Getaran</string>
+
+    <!-- Notification LED brightness -->
+    <string name="notification_title">Notifikasi LED</string>
+    <string name="notification_led_title">Kecerahan LED</string>
+
+    <!-- Torch -->
+    <string name="torch_brightness_title">Kecerahan</string>
+
+    <!-- FPS Info -->
+    <string name="fps_info_title">FPS Info</string>
+    <string name="fps_info_summary">Tunjukan overlay dengan arus bingkai per detik</string>
+
+    <!-- Backlight Dimmer -->
+    <string name="backlight_dimmer">Backlight Dimmer</string>
+    <string name="backlight_summary">Redupkan layar ke nilai paling maksimum</string>
+
+    <!-- Vibrator -->
+    <string name="vibration_strength_title">Kekuatan</string>
+
+    <!-- kcal -->
+    <string name="device_kcal_title">Kalibrasi Warna Layar</string>
+    <string name="device_kcal_summary">Kalibrasi Warna Layar</string>
+    <string name="advanced_settings_kcal">Display Color Calibration</string>
+    <string name="cat_colormanagement">Pengaturan Warna</string>
+    <string name="cat_calibration">Kalibrasi Warna</string>
+
+    <string name="kcal_enabled">Nyala</string>
+    <string name="kcal_disabled">Mati</string>
+    <string name="set_on_boot">Aktifkan KCAL setelah boot</string>
+    <string name="color_red">Merah</string>
+    <string name="color_green">Hijau</string>
+    <string name="color_blue">Biru</string>
+    <string name="color_minimum">Minimum</string>
+    <string name="saturation">Saturasi</string>
+    <string name="value">Nilai</string>
+    <string name="contrast">Kontras</string>
+    <string name="hue">Rona</string>
+    <string name="grayscale">Skala Abu-Abu</string>
+
+    <string name="presets_dialog_title">Pilih preset</string>
+
+    <!-- Presets -->
+    <string name="preset_default">Standar</string>
+    <string name="preset_version_1">Versi 1</string>
+    <string name="preset_version_2">Versi 2</string>
+    <string name="preset_version_3">Versi 3</string>
+    <string name="preset_triluminous">Triluminus</string>
+
+    <!-- Dirac settings: Headset types -->
+    <string name="dirac_headset_default">Standar</string>
+    <string name="dirac_preset_default">Standar</string>
+
+    <!-- Menu -->
+    <string name="kcal_presets" translatable="false">@string/presets_dialog_title</string>
+    <string name="kcal_reset">Atur Ulang</string>
+
+    <!-- Label for feature switch [CHAR LIMIT=30] -->
+    <string name="switch_bar_on">Nyala</string>
+
+    <!-- Label for feature switch [CHAR LIMIT=30] -->
+    <string name="switch_bar_off">Mati</string>
+
+    <!-- Custom seekbar -->
+    <string name="custom_seekbar_value">Nilai: <xliff:g id="v">%s</xliff:g></string>
+    <string name="custom_seekbar_default_value">Standar</string>
+    <string name="custom_seekbar_default_value_to_set">Standar Nilai: <xliff:g id="v">%s</xliff:g>\nTekan untuk mengatur</string>
+    <string name="custom_seekbar_default_value_is_set">Standar Nilai telah diatur</string>
+</resources>
