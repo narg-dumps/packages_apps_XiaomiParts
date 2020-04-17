@@ -123,7 +123,7 @@ public class DeviceSettings extends PreferenceFragment implements
             NotificationLedSeekBarPreference notifLedBrightness = (NotificationLedSeekBarPreference) findPreference(PREF_NOTIF_LED);
             notifLedBrightness.setOnPreferenceChangeListener(this);
         } else {
-            getPreferenceScreen().removePreference(findPreference(CATEGORY_NOTIF));
+            getPreferenceScreen().removePreference(findPreference(PREF_NOTIF_LED));
         }
 
         SwitchPreference fpsInfo = (SwitchPreference) findPreference(PREF_KEY_FPS_INFO);
