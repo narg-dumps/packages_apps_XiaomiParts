@@ -14,6 +14,10 @@
     <string name="headphone_gain">Headphone gain</string>
     <string name="microphone_gain">Microphone gain</string>
 
+    <!-- Notification LED brightness -->
+    <string name="">Notification LED</string>
+    <string name="notification_led_title">LED brightness</string>
+
     <!-- Torch -->
     <string name="torch_brightness_title">Brightness</string>
 
