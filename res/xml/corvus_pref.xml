@@ -88,7 +88,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
+    <!--PreferenceCategory
         android:key="notification_led"
         android:title="@string/notification_title">
         <com.corvus.parts.preferences.NotificationLedSeekBarPreference
@@ -98,7 +98,7 @@
             app:min="1"
             app:units="%"
             android:defaultValue="100" />
-    </PreferenceCategory>
+    </PreferenceCategory -->
 
     <PreferenceCategory
         android:key="torch"
