@@ -17,7 +17,6 @@ import com.corvus.parts.ambient.AmbientGesturePreferenceActivity;
 import com.corvus.parts.preferences.SecureSettingListPreference;
 import com.corvus.parts.preferences.SecureSettingSwitchPreference;
 import com.corvus.parts.preferences.VibrationSeekBarPreference;
-import com.corvus.parts.preferences.NotificationLedSeekBarPreference;
 import com.corvus.parts.preferences.CustomSeekBarPreference;
 
 import com.corvus.parts.R;
@@ -42,13 +41,6 @@ public class DeviceSettings extends PreferenceFragment implements
     // value of vtg_min and vtg_max
     public static final int MIN_VIBRATION = 116;
     public static final int MAX_VIBRATION = 3596;
-
-    public static final String CATEGORY_NOTIF = "notification_led";
-    public static final String PREF_NOTIF_LED = "notification_led_brightness";
-    public static final String NOTIF_LED_PATH = "/sys/class/leds/red/max_brightness";
-
-    public static final int MIN_LED = 1;
-    public static final int MAX_LED = 64;
 
     public static final  String PREF_HEADPHONE_GAIN = "headphone_gain";
     public static final  String PREF_MICROPHONE_GAIN = "microphone_gain";
@@ -117,13 +109,6 @@ public class DeviceSettings extends PreferenceFragment implements
             backlightdimmer.setOnPreferenceChangeListener(this);
         } else {
             getPreferenceScreen().removePreference(findPreference(PREF_BACKLIGHT_DIMMER));
-        }
-
-        if (FileUtils.fileWritable(NOTIF_LED_PATH)) {
-            NotificationLedSeekBarPreference notifLedBrightness = (NotificationLedSeekBarPreference) findPreference(PREF_NOTIF_LED);
-            notifLedBrightness.setOnPreferenceChangeListener(this);
-        } else {
-            getPreferenceScreen().removePreference(findPreference(PREF_NOTIF_LED));
         }
 
         SwitchPreference fpsInfo = (SwitchPreference) findPreference(PREF_KEY_FPS_INFO);
@@ -208,11 +193,6 @@ public class DeviceSettings extends PreferenceFragment implements
                 FileUtils.setValue(BACKLIGHT_DIMMER_PATH, (boolean) value);
                 break;
 
-            case PREF_NOTIF_LED:
-                FileUtils.setValue(NOTIF_LED_PATH, (int) value / 100.0 * (MAX_LED - MIN_LED) + MIN_LED);
-                break;
-            default:
-                break;
         }
         return true;
     }

@@ -70,9 +70,6 @@ public class BootReceiver extends BroadcastReceiver implements Utils {
         FileUtils.setValue(DeviceSettings.VIBRATION_STRENGTH_PATH, Settings.Secure.getInt(
                 context.getContentResolver(), DeviceSettings.PREF_VIBRATION_STRENGTH, 80) / 100.0 * (DeviceSettings.MAX_VIBRATION - DeviceSettings.MIN_VIBRATION) + DeviceSettings.MIN_VIBRATION);
 
-        FileUtils.setValue(DeviceSettings.NOTIF_LED_PATH, Settings.Secure.getInt(
-                context.getContentResolver(), DeviceSettings.PREF_NOTIF_LED, 100) / 100.0 * (DeviceSettings.MAX_LED - DeviceSettings.MIN_LED) + DeviceSettings.MIN_LED);
-
 	//Dirac
         context.startService(new Intent(context, DiracService.class));
 	//Ambient
