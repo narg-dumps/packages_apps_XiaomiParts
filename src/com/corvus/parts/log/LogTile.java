@@ -1,4 +1,4 @@
-package com.corvus.parts;
+package com.corvus.parts.log;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;

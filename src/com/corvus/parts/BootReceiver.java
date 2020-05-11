@@ -8,7 +8,7 @@ import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 
 import com.corvus.parts.kcal.Utils;
-import com.corvus.parts.ambient.SensorsDozeService;
+import com.corvus.parts.dirac.DiracUtils;
 
 public class BootReceiver extends BroadcastReceiver implements Utils {
 
@@ -23,8 +23,6 @@ public class BootReceiver extends BroadcastReceiver implements Utils {
             "max_brightness";
 
     public void onReceive(Context context, Intent intent) {
-
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (Settings.Secure.getInt(context.getContentResolver(), PREF_ENABLED, 0) == 1) {
             FileUtils.setValue(KCAL_ENABLE, Settings.Secure.getInt(context.getContentResolver(),
@@ -50,12 +48,10 @@ public class BootReceiver extends BroadcastReceiver implements Utils {
                     PREF_CONTRAST, CONTRAST_DEFAULT) + CONTRAST_OFFSET);
             FileUtils.setValue(KCAL_HUE, Settings.Secure.getInt(context.getContentResolver(),
                     PREF_HUE, HUE_DEFAULT));
-            FileUtils.setValue(DeviceSettings.BACKLIGHT_DIMMER_PATH, Settings.Secure.getInt(context.getContentResolver(),
-                    DeviceSettings.PREF_BACKLIGHT_DIMMER, 0));
         }
 
         int gain = Settings.Secure.getInt(context.getContentResolver(),
-                DeviceSettings.PREF_HEADPHONE_GAIN, 5);
+                DeviceSettings.PREF_HEADPHONE_GAIN, 2);
         FileUtils.setValue(HEADPHONE_GAIN_PATH, gain + " " + gain);
         FileUtils.setValue(MICROPHONE_GAIN_PATH, Settings.Secure.getInt(context.getContentResolver(),
                 DeviceSettings.PREF_MICROPHONE_GAIN, 0));
@@ -70,14 +66,9 @@ public class BootReceiver extends BroadcastReceiver implements Utils {
         FileUtils.setValue(DeviceSettings.VIBRATION_STRENGTH_PATH, Settings.Secure.getInt(
                 context.getContentResolver(), DeviceSettings.PREF_VIBRATION_STRENGTH, 80) / 100.0 * (DeviceSettings.MAX_VIBRATION - DeviceSettings.MIN_VIBRATION) + DeviceSettings.MIN_VIBRATION);
 
-	//Dirac
-        context.startService(new Intent(context, DiracService.class));
-	//Ambient
-        context.startService(new Intent(context, SensorsDozeService.class));
+        new DiracUtils(context).onBootCompleted();
 
-        boolean enabled = sharedPrefs.getBoolean(DeviceSettings.PREF_KEY_FPS_INFO, false);
-        if (enabled) {
-            context.startService(new Intent(context, FPSInfoService.class));
-        }
+        if (DimmerSwitch.isSupported(context))
+            DimmerSwitch.restore(context);
     }
 }

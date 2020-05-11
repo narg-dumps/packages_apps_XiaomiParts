@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.corvus.parts;
+package com.corvus.parts.log;
 
 import android.content.Context;
 import android.os.AsyncTask;

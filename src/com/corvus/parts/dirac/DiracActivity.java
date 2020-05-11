@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2016 The CyanogenMod Project
- *           (C) 2017 The LineageOS Project
+ * Copyright (C) 2018 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +14,34 @@
  * limitations under the License.
  */
 
-package com.corvus.parts.ambient;
+package com.corvus.parts.dirac;
 
 import android.os.Bundle;
-import com.corvus.parts.R;
+import android.view.MenuItem;
 import android.preference.PreferenceActivity;
 
-public class AmbientGesturePreferenceActivity extends PreferenceActivity {
+public class DiracActivity extends PreferenceActivity {
+
+    private static final String TAG_DIRAC = "dirac";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new AmbientGesturePreferenceFragment())
-                .commit();
+
+        getFragmentManager().beginTransaction().replace(android.R.id.content,
+                new DiracSettingsFragment(), TAG_DIRAC).commit();
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
+

@@ -1,0 +1,7 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Custom seekbar -->
+    <string name="custom_seekbar_value">Nilai: <xliff:g id="v">%s</xliff:g></string>
+    <string name="custom_seekbar_default_value">Standar</string>
+    <string name="custom_seekbar_default_value_to_set">Standar Nilai: <xliff:g id="v">%s</xliff:g>\nTekan untuk mengatur</string>
+    <string name="custom_seekbar_default_value_is_set">Standar Nilai telah diatur</string>
+</resources>

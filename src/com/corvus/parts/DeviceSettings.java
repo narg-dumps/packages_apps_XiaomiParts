@@ -2,18 +2,14 @@ package com.corvus.parts;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragment;
-import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreference;
+import androidx.preference.TwoStatePreference;
 
 import com.corvus.parts.kcal.KCalSettingsActivity;
-import com.corvus.parts.ambient.AmbientGesturePreferenceActivity;
+import com.corvus.parts.dirac.DiracActivity;
 import com.corvus.parts.preferences.SecureSettingListPreference;
 import com.corvus.parts.preferences.SecureSettingSwitchPreference;
 import com.corvus.parts.preferences.VibrationSeekBarPreference;
@@ -24,19 +20,12 @@ import com.corvus.parts.R;
 public class DeviceSettings extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
-    private static final String CATEGORY_DISPLAY = "display";
     private static final String PREF_DEVICE_KCAL = "device_kcal";
 
-    private static final String AMBIENT_DISPLAY = "ambient_display_gestures";
-
-    private static final String PREF_ENABLE_DIRAC = "dirac_enabled";
-    private static final String PREF_HEADSET = "dirac_headset_pref";
-    private static final String PREF_PRESET = "dirac_preset_pref";
+    private static final String PREF_DIRAC = "dirac";
 
     public static final String PREF_VIBRATION_STRENGTH = "vibration_strength";
     public static final String VIBRATION_STRENGTH_PATH = "/sys/devices/virtual/timed_output/vibrator/vtg_level";
-
-    public static final String PREF_KEY_FPS_INFO = "fps_info";
 
     // value of vtg_min and vtg_max
     public static final int MIN_VIBRATION = 116;
@@ -46,8 +35,8 @@ public class DeviceSettings extends PreferenceFragment implements
     public static final  String PREF_MICROPHONE_GAIN = "microphone_gain";
     public static final  String HEADPHONE_GAIN_PATH = "/sys/kernel/sound_control/headphone_gain";
     public static final  String MICROPHONE_GAIN_PATH = "/sys/kernel/sound_control/mic_gain";
+
     public static final  String PREF_BACKLIGHT_DIMMER = "backlight_dimmer";
-    public static final  String BACKLIGHT_DIMMER_PATH = "/sys/module/mdss_fb/parameters/backlight_dimmer";
 
     public static final String PREF_TORCH_BRIGHTNESS = "torch_brightness";
     private static final String TORCH_1_BRIGHTNESS_PATH = "/sys/devices/soc/800f000.qcom," +
@@ -57,8 +46,7 @@ public class DeviceSettings extends PreferenceFragment implements
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.corvus_pref, rootKey);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        setPreferencesFromResource(R.xml.corvus_main, rootKey);
 
         VibrationSeekBarPreference vibrationStrength = (VibrationSeekBarPreference) findPreference(PREF_VIBRATION_STRENGTH);
         vibrationStrength.setEnabled(FileUtils.fileWritable(VIBRATION_STRENGTH_PATH));
@@ -77,43 +65,12 @@ public class DeviceSettings extends PreferenceFragment implements
                 FileUtils.fileWritable(TORCH_2_BRIGHTNESS_PATH));
         torch_brightness.setOnPreferenceChangeListener(this);
 
-        boolean enhancerEnabled;
-        try {
-            enhancerEnabled = DiracService.sDiracUtils.isDiracEnabled();
-        } catch (java.lang.NullPointerException e) {
-            getContext().startService(new Intent(getContext(), DiracService.class));
-            try {
-                enhancerEnabled = DiracService.sDiracUtils.isDiracEnabled();
-            } catch (NullPointerException ne) {
-                // Avoid crash
-                ne.printStackTrace();
-                enhancerEnabled = false;
-            }
-        }
-
-        SecureSettingSwitchPreference enableDirac = (SecureSettingSwitchPreference) findPreference(PREF_ENABLE_DIRAC);
-        enableDirac.setOnPreferenceChangeListener(this);
-        enableDirac.setChecked(enhancerEnabled);
-
-        SecureSettingListPreference headsetType = (SecureSettingListPreference) findPreference(PREF_HEADSET);
-        headsetType.setOnPreferenceChangeListener(this);
-
-        SecureSettingListPreference preset = (SecureSettingListPreference) findPreference(PREF_PRESET);
-        preset.setOnPreferenceChangeListener(this);
-
-        PreferenceCategory displayCategory = (PreferenceCategory) findPreference(CATEGORY_DISPLAY);
-
-        if (FileUtils.fileWritable(BACKLIGHT_DIMMER_PATH)) {
-            SecureSettingSwitchPreference backlightdimmer = (SecureSettingSwitchPreference) findPreference(PREF_BACKLIGHT_DIMMER);
-            backlightdimmer.setChecked(FileUtils.getFileValueAsBoolean(BACKLIGHT_DIMMER_PATH, false));
-            backlightdimmer.setOnPreferenceChangeListener(this);
-        } else {
-            getPreferenceScreen().removePreference(findPreference(PREF_BACKLIGHT_DIMMER));
-        }
-
-        SwitchPreference fpsInfo = (SwitchPreference) findPreference(PREF_KEY_FPS_INFO);
-        fpsInfo.setChecked(prefs.getBoolean(PREF_KEY_FPS_INFO, false));
-        fpsInfo.setOnPreferenceChangeListener(this);
+        TwoStatePreference dimmer = (TwoStatePreference) findPreference(PREF_BACKLIGHT_DIMMER);
+        dimmer.setOnPreferenceChangeListener(new DimmerSwitch());
+        if (DimmerSwitch.isSupported(this.getContext())) {
+            dimmer.setChecked(DimmerSwitch.readValue(this.getContext()));
+        } else
+            dimmer.setEnabled(false);
 
         Preference kcal = findPreference(PREF_DEVICE_KCAL);
         kcal.setOnPreferenceClickListener(preference -> {
@@ -122,9 +79,9 @@ public class DeviceSettings extends PreferenceFragment implements
             return true;
         });
 
-        Preference ambientDisplay = findPreference(AMBIENT_DISPLAY);
-        ambientDisplay.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(getContext(), AmbientGesturePreferenceActivity.class);
+        Preference dirac = findPreference(PREF_DIRAC);
+        dirac.setOnPreferenceClickListener(preference -> {
+            Intent intent = new Intent(getActivity().getApplicationContext(), DiracActivity.class);
             startActivity(intent);
             return true;
         });
@@ -151,59 +108,7 @@ public class DeviceSettings extends PreferenceFragment implements
             case PREF_MICROPHONE_GAIN:
                 FileUtils.setValue(MICROPHONE_GAIN_PATH, (int) value);
                 break;
-
-            case PREF_ENABLE_DIRAC:
-                try {
-                    DiracService.sDiracUtils.setEnabled((boolean) value);
-                } catch (java.lang.NullPointerException e) {
-                    getContext().startService(new Intent(getContext(), DiracService.class));
-                    DiracService.sDiracUtils.setEnabled((boolean) value);
-                }
-                break;
-
-            case PREF_HEADSET:
-                try {
-                    DiracService.sDiracUtils.setHeadsetType(Integer.parseInt(value.toString()));
-                } catch (java.lang.NullPointerException e) {
-                    getContext().startService(new Intent(getContext(), DiracService.class));
-                    DiracService.sDiracUtils.setHeadsetType(Integer.parseInt(value.toString()));
-                }
-                break;
-
-            case PREF_PRESET:
-                try {
-                    DiracService.sDiracUtils.setLevel(String.valueOf(value));
-                } catch (java.lang.NullPointerException e) {
-                    getContext().startService(new Intent(getContext(), DiracService.class));
-                    DiracService.sDiracUtils.setLevel(String.valueOf(value));
-                }
-                break;
-
-            case PREF_KEY_FPS_INFO:
-                boolean enabled = (Boolean) value;
-                Intent fpsinfo = new Intent(this.getContext(), FPSInfoService.class);
-                if (enabled) {
-                    this.getContext().startService(fpsinfo);
-                } else {
-                    this.getContext().stopService(fpsinfo);
-                }
-                break;
-
-            case PREF_BACKLIGHT_DIMMER:
-                FileUtils.setValue(BACKLIGHT_DIMMER_PATH, (boolean) value);
-                break;
-
         }
         return true;
-    }
-
-    private boolean isAppNotInstalled(String uri) {
-        PackageManager packageManager = getContext().getPackageManager();
-        try {
-            packageManager.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
-            return false;
-        } catch (PackageManager.NameNotFoundException e) {
-            return true;
-        }
     }
 }

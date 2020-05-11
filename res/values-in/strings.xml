@@ -11,10 +11,6 @@
     <!-- Torch -->
     <string name="torch_brightness_title">Kecerahan</string>
 
-    <!-- FPS Info -->
-    <string name="fps_info_title">FPS Info</string>
-    <string name="fps_info_summary">Tunjukan overlay dengan arus bingkai per detik</string>
-
     <!-- Backlight Dimmer -->
     <string name="backlight_dimmer">Backlight Dimmer</string>
     <string name="backlight_summary">Redupkan layar ke nilai paling maksimum</string>
@@ -64,10 +60,4 @@
 
     <!-- Label for feature switch [CHAR LIMIT=30] -->
     <string name="switch_bar_off">Mati</string>
-
-    <!-- Custom seekbar -->
-    <string name="custom_seekbar_value">Nilai: <xliff:g id="v">%s</xliff:g></string>
-    <string name="custom_seekbar_default_value">Standar</string>
-    <string name="custom_seekbar_default_value_to_set">Standar Nilai: <xliff:g id="v">%s</xliff:g>\nTekan untuk mengatur</string>
-    <string name="custom_seekbar_default_value_is_set">Standar Nilai telah diatur</string>
 </resources>

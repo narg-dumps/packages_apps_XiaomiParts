@@ -1,4 +1,4 @@
-package com.corvus.parts;
+package com.corvus.parts.log;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
