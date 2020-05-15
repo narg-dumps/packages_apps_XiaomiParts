@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import android.provider.Settings;
+import android.content.SharedPreferences;
 
 import com.corvus.parts.kcal.Utils;
 import com.corvus.parts.dirac.DiracUtils;
@@ -22,7 +23,9 @@ public class BootReceiver extends BroadcastReceiver implements Utils {
             "spmi0-03/800f000.qcom,spmi:qcom,pm660l@3:qcom,leds@d300/leds/led:torch_1/" +
             "max_brightness";
 
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, final Intent intent) {
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (Settings.Secure.getInt(context.getContentResolver(), PREF_ENABLED, 0) == 1) {
             FileUtils.setValue(KCAL_ENABLE, Settings.Secure.getInt(context.getContentResolver(),
@@ -70,5 +73,10 @@ public class BootReceiver extends BroadcastReceiver implements Utils {
 
         if (DimmerSwitch.isSupported(context))
             DimmerSwitch.restore(context);
+
+        boolean enabled = sharedPrefs.getBoolean(DeviceSettings.PREF_KEY_FPS_INFO, false);
+        if (enabled) {
+            context.startService(new Intent(context, FPSInfoService.class));
+        }
     }
 }

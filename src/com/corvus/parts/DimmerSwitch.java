@@ -12,7 +12,7 @@ public class DimmerSwitch implements OnPreferenceChangeListener {
     private static final String FILE = "/sys/module/mdss_fb/parameters/backlight_dimmer";
 
     public static boolean isSupported(Context context) {
-        return Utils.fileWritable(FILE);
+        return FileUtils.fileWritable(FILE);
     }
 
     public static void restore(Context context) {
@@ -22,11 +22,11 @@ public class DimmerSwitch implements OnPreferenceChangeListener {
     }
 
     public static boolean readValue(Context context) {
-        return !Utils.readValue(FILE, "0").equals("0");
+        return !FileUtils.readValue(FILE, "0").equals("0");
     }
 
     public static void writeValue(Context context, boolean newValue) {
-        Utils.writeValue(FILE, (newValue ? "1" : "0"));
+        FileUtils.writeValue(FILE, (newValue ? "1" : "0"));
     }
 
     @Override

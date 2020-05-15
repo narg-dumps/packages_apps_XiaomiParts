@@ -38,6 +38,13 @@
             android:title="@string/backlight_dimmer"
             android:summary="@string/backlight_summary" />
 
+        <SwitchPreference
+            android:key="fps_info"
+            android:icon="@drawable/ic_fps_info"
+            android:title="@string/fps_info_title"
+            android:summary="@string/fps_info_summary"
+            android:persistent="true" />
+
         <Preference
             android:key="device_kcal"
             android:persistent="false"
