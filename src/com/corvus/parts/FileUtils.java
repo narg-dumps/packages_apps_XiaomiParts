@@ -16,16 +16,15 @@
 
 package com.corvus.parts;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 
-public class FileUtils {
+class FileUtils {
 
-    public static boolean fileWritable(String filename) {
+    static boolean fileWritable(String filename) {
         return fileExists(filename) && new File(filename).canWrite();
     }
 
@@ -34,6 +33,22 @@ public class FileUtils {
             return false;
         }
         return new File(filename).exists();
+    }
+
+    static void setValue(String path, int value) {
+        if (fileWritable(path)) {
+            if (path == null) {
+                return;
+            }
+            try {
+                FileOutputStream fos = new FileOutputStream(new File(path));
+                fos.write(Integer.toString(value).getBytes());
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     static void setValue(String path, boolean value) {
@@ -52,23 +67,7 @@ public class FileUtils {
         }
     }
 
-    public static void setValue(String path, int value) {
-        if (fileWritable(path)) {
-            if (path == null) {
-                return;
-            }
-            try {
-                FileOutputStream fos = new FileOutputStream(new File(path));
-                fos.write(Integer.toString(value).getBytes());
-                fos.flush();
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void setValue(String path, double value) {
+    static void setValue(String path, double value) {
         if (fileWritable(path)) {
             if (path == null) {
                 return;
@@ -84,7 +83,7 @@ public class FileUtils {
         }
     }
 
-   public static void setValue(String path, String value) {
+    static void setValue(String path, String value) {
         if (fileWritable(path)) {
             if (path == null) {
                 return;
@@ -100,12 +99,12 @@ public class FileUtils {
         }
     }
 
-    public static String readLine(String filename) {
+    static String readLine(String filename) {
         if (filename == null) {
             return null;
         }
         BufferedReader br = null;
-        String line = null;
+        String line;
         try {
             br = new BufferedReader(new FileReader(filename), 1024);
             line = br.readLine();
@@ -123,19 +122,10 @@ public class FileUtils {
         return line;
     }
 
-
-   public static boolean getFileValueAsBoolean(String filename, boolean defValue) {
+    static boolean getFileValueAsBoolean(String filename, boolean defValue) {
         String fileValue = readLine(filename);
         if (fileValue != null) {
-            return !fileValue.equals("0");
-        }
-        return defValue;
-    }
-
-    public static String readValue(String filename, String defValue) {
-        String fileValue = readLine(filename);
-        if(fileValue!=null){
-            return fileValue;
+            return !fileValue.equals("N");
         }
         return defValue;
     }
