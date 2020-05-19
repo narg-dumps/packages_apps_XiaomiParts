@@ -42,6 +42,7 @@ public class DeviceSettings extends PreferenceFragment implements
     public static final  String MICROPHONE_GAIN_PATH = "/sys/kernel/sound_control/mic_gain";
 
     public static final  String PREF_BACKLIGHT_DIMMER = "backlight_dimmer";
+    public static final  String BACKLIGHT_DIMMER_PATH = "/sys/module/mdss_fb/parameters/backlight_dimmer";
 
     public static final String PREF_TORCH_BRIGHTNESS = "torch_brightness";
     private static final String TORCH_1_BRIGHTNESS_PATH = "/sys/devices/soc/800f000.qcom," +
@@ -74,12 +75,10 @@ public class DeviceSettings extends PreferenceFragment implements
                 FileUtils.fileWritable(TORCH_2_BRIGHTNESS_PATH));
         torch_brightness.setOnPreferenceChangeListener(this);
 
-        TwoStatePreference dimmer = (TwoStatePreference) findPreference(PREF_BACKLIGHT_DIMMER);
-        dimmer.setOnPreferenceChangeListener(new DimmerSwitch());
-        if (DimmerSwitch.isSupported(this.getContext())) {
-            dimmer.setChecked(DimmerSwitch.readValue(this.getContext()));
-        } else
-            dimmer.setEnabled(false);
+        SecureSettingSwitchPreference dim = (SecureSettingSwitchPreference) findPreference(PREF_BACKLIGHT_DIMMER);
+        dim.setEnabled(Dimmer.isSupported());
+        dim.setChecked(Dimmer.isCurrentlyEnabled(this.getContext()));
+        dim.setOnPreferenceChangeListener(new Dimmer(getContext()));
 
         SwitchPreference fpsInfo = (SwitchPreference) findPreference(PREF_KEY_FPS_INFO);
         fpsInfo.setChecked(prefs.getBoolean(PREF_KEY_FPS_INFO, false));

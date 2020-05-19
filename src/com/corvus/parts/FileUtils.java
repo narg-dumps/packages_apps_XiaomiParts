@@ -25,22 +25,6 @@ import java.io.FileReader;
 
 public class FileUtils {
 
-    public static void writeValue(String filename, String value) {
-        if (filename == null) {
-            return;
-        }
-        try {
-            FileOutputStream fos = new FileOutputStream(new File(filename));
-            fos.write(value.getBytes());
-            fos.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static boolean fileWritable(String filename) {
         return fileExists(filename) && new File(filename).canWrite();
     }
@@ -50,6 +34,22 @@ public class FileUtils {
             return false;
         }
         return new File(filename).exists();
+    }
+
+    static void setValue(String path, boolean value) {
+        if (fileWritable(path)) {
+            if (path == null) {
+                return;
+            }
+            try {
+                FileOutputStream fos = new FileOutputStream(new File(path));
+                fos.write((value ? "1" : "0").getBytes());
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void setValue(String path, int value) {
@@ -121,6 +121,15 @@ public class FileUtils {
             }
         }
         return line;
+    }
+
+
+   public static boolean getFileValueAsBoolean(String filename, boolean defValue) {
+        String fileValue = readLine(filename);
+        if (fileValue != null) {
+            return !fileValue.equals("0");
+        }
+        return defValue;
     }
 
     public static String readValue(String filename, String defValue) {
