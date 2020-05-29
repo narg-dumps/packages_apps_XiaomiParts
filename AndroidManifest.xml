@@ -58,18 +58,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Dirac Sounds -->
-        <activity
-            android:name=".dirac.DiracActivity"
-            android:theme="@style/CustomOptionsTheme"
-            android:excludeFromRecents="true"
-            android:label="@string/dirac_title">
-            <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
-                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
         <service
             android:name=".tile.CorvusPartsTile"
             android:enabled="true"

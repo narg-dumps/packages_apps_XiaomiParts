@@ -13,7 +13,6 @@ import androidx.preference.SwitchPreference;
 import androidx.preference.TwoStatePreference;
 
 import com.corvus.parts.kcal.KCalSettingsActivity;
-import com.corvus.parts.dirac.DiracActivity;
 import com.corvus.parts.preferences.SecureSettingListPreference;
 import com.corvus.parts.preferences.SecureSettingSwitchPreference;
 import com.corvus.parts.preferences.VibrationSeekBarPreference;
@@ -31,8 +30,6 @@ public class DeviceSettings extends PreferenceFragment implements
     private static final String TAG = "DeviceSettings";
 
     private static final String PREF_DEVICE_KCAL = "device_kcal";
-
-    private static final String PREF_DIRAC = "dirac";
 
     public static final String PREF_VIBRATION_STRENGTH = "vibration_strength";
     public static final String VIBRATION_STRENGTH_PATH = "/sys/devices/virtual/timed_output/vibrator/vtg_level";
@@ -101,13 +98,6 @@ public class DeviceSettings extends PreferenceFragment implements
         Preference kcal = findPreference(PREF_DEVICE_KCAL);
         kcal.setOnPreferenceClickListener(preference -> {
             Intent intent = new Intent(getActivity().getApplicationContext(), KCalSettingsActivity.class);
-            startActivity(intent);
-            return true;
-        });
-
-        Preference dirac = findPreference(PREF_DIRAC);
-        dirac.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(getActivity(), DiracActivity.class);
             startActivity(intent);
             return true;
         });

@@ -9,7 +9,6 @@ import android.provider.Settings;
 import android.content.SharedPreferences;
 
 import com.corvus.parts.kcal.Utils;
-import com.corvus.parts.dirac.DiracUtils;
 
 public class BootReceiver extends BroadcastReceiver implements Utils {
 
@@ -61,8 +60,6 @@ public class BootReceiver extends BroadcastReceiver implements Utils {
 
         FileUtils.setValue(DeviceSettings.BACKLIGHT_DIMMER_PATH, Settings.Secure.getInt(context.getContentResolver(),
                 DeviceSettings.PREF_BACKLIGHT_DIMMER, 0));
-
-        new DiracUtils(context).onBootCompleted();
 
         boolean enabled = sharedPrefs.getBoolean(DeviceSettings.PREF_KEY_FPS_INFO, false);
         if (enabled) {
