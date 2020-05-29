@@ -18,6 +18,7 @@
             app:min="-10"
             android:icon="@drawable/ic_mic"
             android:title="@string/microphone_gain"/>
+    </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/display_category">
         <com.corvus.parts.preferences.SecureSettingSwitchPreference
