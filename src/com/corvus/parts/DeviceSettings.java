@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SELinux;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceManager;
@@ -18,10 +19,16 @@ import com.corvus.parts.preferences.SecureSettingSwitchPreference;
 import com.corvus.parts.preferences.VibrationSeekBarPreference;
 import com.corvus.parts.preferences.CustomSeekBarPreference;
 
+import com.corvus.parts.su.SuShell;
+import com.corvus.parts.su.SuTask;
+import android.util.Log;
+
 import com.corvus.parts.R;
 
 public class DeviceSettings extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener {
+
+    private static final String TAG = "DeviceSettings";
 
     private static final String PREF_DEVICE_KCAL = "device_kcal";
 
@@ -35,6 +42,11 @@ public class DeviceSettings extends PreferenceFragment implements
     public static final int MAX_VIBRATION = 3596;
 
     public static final String PREF_KEY_FPS_INFO = "fps_info";
+
+    private static final String SELINUX_CATEGORY = "selinux";
+    private static final String SELINUX_EXPLANATION = "selinux_explanation";
+    private static final String PREF_SELINUX_MODE = "selinux_mode";
+    private static final String PREF_SELINUX_PERSISTENCE = "selinux_persistence";
 
     public static final  String PREF_HEADPHONE_GAIN = "headphone_gain";
     public static final  String PREF_MICROPHONE_GAIN = "microphone_gain";
@@ -51,6 +63,8 @@ public class DeviceSettings extends PreferenceFragment implements
             "spmi/spmi-0/spmi0-03/800f000.qcom,spmi:qcom,pm660l@3:qcom,leds@d300/leds/led:torch_1/max_brightness";
 
     private static Context mContext;
+    private SwitchPreference mSelinuxMode;
+    private SwitchPreference mSelinuxPersistence;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -93,10 +107,34 @@ public class DeviceSettings extends PreferenceFragment implements
 
         Preference dirac = findPreference(PREF_DIRAC);
         dirac.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(getActivity().getApplicationContext(), DiracActivity.class);
+            Intent intent = new Intent(getActivity(), DiracActivity.class);
             startActivity(intent);
             return true;
         });
+
+        // SELinux
+        Preference selinuxCategory = findPreference(SELINUX_CATEGORY);
+        Preference selinuxExp = findPreference(SELINUX_EXPLANATION);
+        mSelinuxMode = (SwitchPreference) findPreference(PREF_SELINUX_MODE);
+        mSelinuxMode.setChecked(SELinux.isSELinuxEnforced());
+
+        mSelinuxPersistence =
+            (SwitchPreference) findPreference(PREF_SELINUX_PERSISTENCE);
+        mSelinuxPersistence.setChecked(getContext()
+            .getSharedPreferences("selinux_pref", Context.MODE_PRIVATE)
+            .contains(PREF_SELINUX_MODE));
+
+        // Disabling root required switches if unrooted and letting the user know
+        if (!FileUtils.isRooted(getContext())) {
+            mSelinuxMode.setEnabled(false);
+            mSelinuxPersistence.setEnabled(false);
+            mSelinuxPersistence.setChecked(false);
+            selinuxExp.setSummary(selinuxExp.getSummary() + "\n" +
+                getResources().getString(R.string.selinux_unrooted_summary));
+          } else {
+            mSelinuxPersistence.setOnPreferenceChangeListener(this);
+            mSelinuxMode.setOnPreferenceChangeListener(this);
+        }
     }
 
     @Override
@@ -130,7 +168,56 @@ public class DeviceSettings extends PreferenceFragment implements
                     this.getContext().stopService(fpsinfo);
                 }
                 break;
+
+            case PREF_SELINUX_MODE:
+                boolean on = (Boolean) value;
+                new SwitchSelinuxTask(getActivity()).execute(on);
+                setSelinuxEnabled(on, mSelinuxPersistence.isChecked());
+                break;
+            case PREF_SELINUX_PERSISTENCE:
+                setSelinuxEnabled(mSelinuxMode.isChecked(), (Boolean) value);
+                break;
         }
         return true;
     }
+
+    private void setSelinuxEnabled(boolean status, boolean persistent) {
+      SharedPreferences.Editor editor = getContext()
+        .getSharedPreferences("selinux_pref", Context.MODE_PRIVATE).edit();
+      if (persistent) {
+        editor.putBoolean(PREF_SELINUX_MODE, status);
+      } else {
+        editor.remove(PREF_SELINUX_MODE);
+      }
+        editor.apply();
+        mSelinuxMode.setChecked(status);
+     }
+
+    private class SwitchSelinuxTask extends SuTask<Boolean> {
+      public SwitchSelinuxTask(Context context) {
+        super(context);
+      }
+
+      @Override
+      protected void sudoInBackground(Boolean... params) throws SuShell.SuDeniedException {
+        if (params.length != 1) {
+            Log.e(TAG, "SwitchSelinuxTask: invalid params count");
+            return;
+         }
+         if (params[0]) {
+            SuShell.runWithSuCheck("setenforce 1");
+         } else {
+            SuShell.runWithSuCheck("setenforce 0");
+         }
+      }
+
+      @Override
+      protected void onPostExecute(Boolean result) {
+        super.onPostExecute(result);
+        if (!result) {
+          // Did not work, so restore actual value
+          setSelinuxEnabled(SELinux.isSELinuxEnforced(), mSelinuxPersistence.isChecked());
+         }
+      }
+   }
 }

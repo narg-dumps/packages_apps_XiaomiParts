@@ -30,7 +30,17 @@
                 <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".OnBoot"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".DeviceSettingsActivity"
             android:label="@string/corvus_parts_title">

@@ -16,13 +16,27 @@
 
 package com.corvus.parts;
 
+import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import android.util.Log;
+import java.lang.Runtime;
 
 class FileUtils {
+
+    private static final String TAG = "FileUtils";
+
+
+    // Magisk app name
+    private static final String MAGISK_APP = "com.topjohnwu.magisk";
 
     static boolean fileWritable(String filename) {
         return fileExists(filename) && new File(filename).canWrite();
@@ -128,5 +142,43 @@ class FileUtils {
             return !fileValue.equals("N");
         }
         return defValue;
+    }
+
+    public static boolean isPackageInstalled(Context context, String pkg, boolean ignoreState) {
+        if (pkg != null) {
+            try {
+                PackageInfo pi = context.getPackageManager().getPackageInfo(pkg, 0);
+                if (!pi.applicationInfo.enabled && !ignoreState) {
+                    return false;
+                }
+            } catch (NameNotFoundException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public static boolean isPackageInstalled(Context context, String pkg) {
+        return isPackageInstalled(context, pkg, true);
+    }
+
+    /**
+     * Checks if the device is rooted
+     * @param context context for magisk app detection
+     * @return <code>true</code> if root found, <code>false</code> otherwise
+     */
+    public static boolean isRooted(Context context) {
+        // check by existence of magisk app
+        if (isPackageInstalled(context, MAGISK_APP, false))
+            return true;
+
+        // check by existence of su binary
+        try {
+            Runtime.getRuntime().exec("which su");
+            return true;
+        } catch (Exception e) {
+            Log.i(TAG, "su binaries not found");
+        }
+
+        return false;
     }
 }

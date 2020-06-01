@@ -10,6 +10,9 @@ import android.os.Environment;
 import android.service.quicksettings.TileService;
 import android.widget.Toast;
 
+import com.corvus.parts.su.SuShell;
+import com.corvus.parts.su.SuTask;
+
 import java.io.File;
 import java.io.IOException;
 
