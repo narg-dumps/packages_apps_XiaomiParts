@@ -47,10 +47,6 @@
     <string name="preset_version_3">Versi 3</string>
     <string name="preset_triluminous">Triluminus</string>
 
-    <!-- Dirac settings: Headset types -->
-    <string name="dirac_headset_default">Standar</string>
-    <string name="dirac_preset_default">Standar</string>
-
     <!-- Menu -->
     <string name="kcal_presets" translatable="false">@string/presets_dialog_title</string>
     <string name="kcal_reset">Atur Ulang</string>
