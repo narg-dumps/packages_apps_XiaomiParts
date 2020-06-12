@@ -30,7 +30,7 @@ import java.io.IOException;
 import android.util.Log;
 import java.lang.Runtime;
 
-class FileUtils {
+public class FileUtils {
 
     private static final String TAG = "FileUtils";
 
@@ -113,7 +113,7 @@ class FileUtils {
         }
     }
 
-    static String readLine(String filename) {
+    public static String readLine(String filename) {
         if (filename == null) {
             return null;
         }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.corvus.parts.tile;
+package com.corvus.parts.fps;
 
 import android.app.ActivityManager;
 import android.content.Intent;
@@ -23,7 +23,6 @@ import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
 import com.corvus.parts.R;
-import com.corvus.parts.FPSInfoService;
 
 // TODO: Add FPS drawables
 public class FPSTileService extends TileService {
@@ -41,7 +40,7 @@ public class FPSTileService extends TileService {
               (ActivityManager) getSystemService(this.ACTIVITY_SERVICE);
       for (ActivityManager.RunningServiceInfo service :
               manager.getRunningServices(Integer.MAX_VALUE)) {
-          if (com.corvus.parts.FPSInfoService.class.getName().equals(
+          if (FPSInfoService.class.getName().equals(
                   service.service.getClassName())) {
               isShowing = true;
           }
@@ -51,7 +50,7 @@ public class FPSTileService extends TileService {
 
   @Override
   public void onClick() {
-      Intent fpsinfo = new Intent(this, com.corvus.parts.FPSInfoService.class);
+      Intent fpsinfo = new Intent(this, FPSInfoService.class);
       if (!isShowing)
           this.startService(fpsinfo);
       else

@@ -12,6 +12,7 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import androidx.preference.TwoStatePreference;
 
+import com.corvus.parts.fps.FPSInfoService;
 import com.corvus.parts.kcal.KCalSettingsActivity;
 import com.corvus.parts.preferences.SecureSettingListPreference;
 import com.corvus.parts.preferences.SecureSettingSwitchPreference;

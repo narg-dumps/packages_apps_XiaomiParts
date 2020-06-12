@@ -1,11 +1,8 @@
-package com.corvus.parts.tile;
+package com.corvus.parts;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.service.quicksettings.TileService;
-
-import com.corvus.parts.DeviceSettings;
-import com.corvus.parts.DeviceSettingsActivity;
 
 public class CorvusPartsTile extends TileService {
 

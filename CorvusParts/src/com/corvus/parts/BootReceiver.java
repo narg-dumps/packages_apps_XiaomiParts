@@ -8,6 +8,7 @@ import androidx.preference.PreferenceManager;
 import android.provider.Settings;
 import android.content.SharedPreferences;
 
+import com.corvus.parts.fps.FPSInfoService;
 import com.corvus.parts.kcal.Utils;
 
 public class BootReceiver extends BroadcastReceiver implements Utils {

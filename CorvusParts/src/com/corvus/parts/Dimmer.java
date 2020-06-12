@@ -1,11 +1,8 @@
 package com.corvus.parts;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.provider.Settings;
 import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
-import androidx.preference.PreferenceManager;
 
 import com.corvus.parts.DeviceSettings;
 
