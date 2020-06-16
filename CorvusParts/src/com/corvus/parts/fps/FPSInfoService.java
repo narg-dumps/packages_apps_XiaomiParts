@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -87,10 +88,7 @@ public class FPSInfoService extends Service {
 
             final int textSize = Math.round(12 * density);
 
-            Typeface typeface = Typeface.create("googlesans", Typeface.BOLD);
-
             mOnlinePaint = new Paint();
-            mOnlinePaint.setTypeface(typeface);
             mOnlinePaint.setAntiAlias(true);
             mOnlinePaint.setTextSize(textSize);
             mOnlinePaint.setColor(Color.WHITE);
@@ -155,6 +153,8 @@ public class FPSInfoService extends Service {
                 mMaxWidth = (int) mOnlinePaint.measureText(mFps);
             }
 
+            Typeface typeface = Typeface.create(getResources().getString(com.android.internal.R.string.config_headlineFontFamilyMedium), Typeface.BOLD);
+            mOnlinePaint.setTypeface(typeface);
             int neededWidth = mPaddingRight + mPaddingLeft + mMaxWidth;
             int neededHeight = mPaddingTop + mPaddingBottom + 40;
             if (neededWidth != mNeededWidth || neededHeight != mNeededHeight) {
