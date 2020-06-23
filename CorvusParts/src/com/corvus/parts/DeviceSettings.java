@@ -13,7 +13,7 @@ import androidx.preference.SwitchPreference;
 import androidx.preference.TwoStatePreference;
 
 import com.corvus.parts.fps.FPSInfoService;
-import com.corvus.parts.kcal.KCalSettingsActivity;
+import com.corvus.parts.kcal.KcalSettingsActivity;
 import com.corvus.parts.preferences.SecureSettingListPreference;
 import com.corvus.parts.preferences.SecureSettingSwitchPreference;
 import com.corvus.parts.preferences.VibrationSeekBarPreference;
@@ -127,7 +127,7 @@ public class DeviceSettings extends PreferenceFragment implements
 
         Preference kcal = findPreference(PREF_DEVICE_KCAL);
         kcal.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(getActivity().getApplicationContext(), KCalSettingsActivity.class);
+            Intent intent = new Intent(getActivity().getApplicationContext(), KcalSettingsActivity.class);
             startActivity(intent);
             return true;
         });

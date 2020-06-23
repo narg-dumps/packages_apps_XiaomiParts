@@ -69,7 +69,7 @@
             android:summary="@string/device_kcal_summary" >
             <intent
                 android:action="android.intent.action.MAIN"
-                android:targetClass="com.corvus.parts.kcal.KCalSettingsActivity"
+                android:targetClass="com.corvus.parts.kcal.KcalSettingsActivity"
                 android:targetPackage="com.corvus.parts.kcal"/>
         </Preference>
 

@@ -2,15 +2,28 @@ package com.corvus.parts.kcal;
 
 import android.os.Bundle;
 import android.provider.Settings;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.Preference;
+import androidx.viewpager.widget.ViewPager;
 
 import com.corvus.parts.R;
 import com.corvus.parts.preferences.SecureSettingSeekBarPreference;
 import com.corvus.parts.preferences.SecureSettingSwitchPreference;
 
-public class KCalSettings extends PreferenceFragment implements
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.LayoutInflater;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+public class KcalSettings extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener, Utils {
+
+    ViewPager viewPager;
+    LinearLayout DotsKcal;
+    private int dotscount;
+    private ImageView[] dots;
 
     private final FileUtils mFileUtils = new FileUtils();
 
@@ -25,12 +38,6 @@ public class KCalSettings extends PreferenceFragment implements
     private SecureSettingSeekBarPreference mHue;
     private SecureSettingSeekBarPreference mMin;
     private SecureSettingSwitchPreference mGrayscale;
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -74,6 +81,59 @@ public class KCalSettings extends PreferenceFragment implements
 
         mGrayscale = (SecureSettingSwitchPreference) findPreference(PREF_GRAYSCALE);
         mGrayscale.setOnPreferenceChangeListener(this);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.kcal_layout, container, false);
+        ((ViewGroup) view).addView(super.onCreateView(inflater, container, savedInstanceState));
+        return view;
+    }
+
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getActivity());
+        viewPager.setAdapter(viewPagerAdapter);
+        DotsKcal = (LinearLayout) view.findViewById(R.id.dots);
+        dotscount = viewPagerAdapter.getCount();
+        dots = new ImageView[dotscount];
+
+        for(int i = 0; i < dotscount; i++){
+            dots[i] = new ImageView(getActivity());
+            dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.inactive_dot));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(8, 0, 8, 0);
+            DotsKcal.addView(dots[i], params);
+        }
+
+        dots[0].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+                for(int i = 0; i< dotscount; i++){
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.inactive_dot));
+                }
+                dots[position].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

@@ -9,23 +9,22 @@ import android.view.MenuItem;
 
 import com.corvus.parts.R;
 
-public class KCalSettingsActivity extends Activity implements Utils {
+public class KcalSettingsActivity extends Activity implements Utils {
 
-    private KCalSettings mKCalSettingsFragment;
+    private KcalSettings mKcalSettingsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_kcal);
 
-        Fragment fragment = getFragmentManager().findFragmentById(R.id.fragment_kcal);
+        Fragment fragment = getFragmentManager().findFragmentById(android.R.id.content);
         if (fragment == null) {
-            mKCalSettingsFragment = new KCalSettings();
+            mKcalSettingsFragment = new KcalSettings();
             getFragmentManager().beginTransaction()
-                    .add(R.id.fragment_kcal, mKCalSettingsFragment)
+                    .add(android.R.id.content, mKcalSettingsFragment)
                     .commit();
         } else {
-            mKCalSettingsFragment = (KCalSettings) fragment;
+            mKcalSettingsFragment = (KcalSettings) fragment;
         }
     }
 
@@ -37,7 +36,7 @@ public class KCalSettingsActivity extends Activity implements Utils {
                 return true;
 
             case R.id.action_reset:
-                mKCalSettingsFragment.applyValues(RED_DEFAULT + " " +
+                mKcalSettingsFragment.applyValues(RED_DEFAULT + " " +
                         GREEN_DEFAULT + " " +
                         BLUE_DEFAULT + " " +
                         MINIMUM_DEFAULT + " " +
@@ -45,13 +44,13 @@ public class KCalSettingsActivity extends Activity implements Utils {
                         VALUE_DEFAULT + " " +
                         CONTRAST_DEFAULT + " " +
                         HUE_DEFAULT);
-                mKCalSettingsFragment.setmGrayscale(GRAYSCALE_DEFAULT);
-                mKCalSettingsFragment.setmSetOnBoot(SETONBOOT_DEFAULT);
+                mKcalSettingsFragment.setmGrayscale(GRAYSCALE_DEFAULT);
+                mKcalSettingsFragment.setmSetOnBoot(SETONBOOT_DEFAULT);
                 return true;
 
             case R.id.action_preset:
                 new PresetDialog().show(getFragmentManager(),
-                        KCalSettingsActivity.class.getName(), mKCalSettingsFragment);
+                        KcalSettingsActivity.class.getName(), mKcalSettingsFragment);
                 return true;
 
             default:
