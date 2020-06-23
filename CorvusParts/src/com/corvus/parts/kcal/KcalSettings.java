@@ -98,6 +98,7 @@ public class KcalSettings extends PreferenceFragment implements
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getActivity());
         viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setPageTransformer(true, new FadeOutTransformation());
         DotsKcal = (LinearLayout) view.findViewById(R.id.dots);
         dotscount = viewPagerAdapter.getCount();
         dots = new ImageView[dotscount];
