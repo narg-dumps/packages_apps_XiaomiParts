@@ -97,11 +97,6 @@
         </service>
 
         <service
-            android:name=".DiracService"
-            android:enabled="true"
-            android:stopWithTask="false" />
-
-        <service
             android:name=".fps.FPSInfoService"
             android:exported="false">
         </service>
