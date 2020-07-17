@@ -2,31 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="@string/audio_category">
-        <com.xiaomi.parts.preferences.CustomSeekBarPreference
-            android:defaultValue="2"
-            android:key="headphone_gain"
-            android:max="20"
-            app:min="-40"
-            android:icon="@drawable/ic_headphone"
-            android:title="@string/headphone_gain"/>
-
-        <com.xiaomi.parts.preferences.CustomSeekBarPreference
-            android:defaultValue="0"
-            android:key="microphone_gain"
-            android:max="20"
-            app:min="-10"
-            android:icon="@drawable/ic_mic"
-            android:title="@string/microphone_gain"/>
-    </PreferenceCategory>
-
     <PreferenceCategory android:title="@string/display_category">
-        <com.xiaomi.parts.preferences.SecureSettingSwitchPreference
-            android:key="backlight_dimmer"
-            android:icon="@drawable/ic_backlight"
-            android:title="@string/backlight_dimmer"
-            android:summary="@string/backlight_summary" />
-
         <SwitchPreference
             android:key="fps_info"
             android:icon="@drawable/ic_fps_info"
