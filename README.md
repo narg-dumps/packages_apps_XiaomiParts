@@ -1,7 +1,7 @@
 # if u want use it, clone https://github.com/narg-dump/packages_apps_XiaomiParts.git packages/apps/XiaomiParts
 # add inherit on your dt $(call inherit-product, packages/apps/XiaomiParts/xiaomiparts.mk)
 # enforcing build, add on sepolicy/vendor :
-
+'''
 file.te : 
 # XiaomiParts	
 type kcal_dev, sysfs_type, fs_type;
@@ -23,9 +23,10 @@ allow system_app sysfs_vibrator:file rw_file_perms;
 allow system_app sysfs_vibrator:dir search;
 allow system_app sysfs_fpsinfo:file { open read getattr write };	
 allow system_app sysfs_torch:file { open getattr write };
+'''
 
 # Other add :
-
+'''
 device.mk :
 init.xiaomi.rc \
 
@@ -112,5 +113,5 @@ LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := etc/init.xiaomi.rc
 LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)/init/hw
 include $(BUILD_PREBUILT)
-
-ENJOY !!
+'''
+# ENJOY !!
