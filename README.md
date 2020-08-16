@@ -82,12 +82,6 @@ on boot
     chmod 660 /sys/devices/platform/kcal_ctrl.0/kcal_min
     chmod 660 /sys/devices/platform/kcal_ctrl.0/kcal
 
-    # Audio gain permissions
-    chown system system /sys/kernel/sound_control/headphone_gain
-    chown system system /sys/kernel/sound_control/mic_gain
-    chmod 0660 /sys/kernel/sound_control/headphone_gain
-    chmod 0660 /sys/kernel/sound_control/mic_gain
-
     # Torch
     chmod 0660 /sys/devices/soc/800f000.qcom,spmi/spmi-0/spmi0-03/800f000.qcom,spmi:qcom,pm660l@3:qcom,leds@d300/leds/led:torch_0/max_brightness
     chmod 0660 /sys/devices/soc/800f000.qcom,spmi/spmi-0/spmi0-03/800f000.qcom,spmi:qcom,pm660l@3:qcom,leds@d300/leds/led:torch_1/max_brightness
