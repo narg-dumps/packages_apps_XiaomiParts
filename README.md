@@ -88,10 +88,6 @@ on boot
     chown system system /sys/devices/soc/800f000.qcom,spmi/spmi-0/spmi0-03/800f000.qcom,spmi:qcom,pm660l@3:qcom,leds@d300/leds/led:torch_0/max_brightness
     chown system system /sys/devices/soc/800f000.qcom,spmi/spmi-0/spmi0-03/800f000.qcom,spmi:qcom,pm660l@3:qcom,leds@d300/leds/led:torch_1/max_brightness
 
-    # Backlight dimmer
-    chown system system /sys/module/mdss_fb/parameters/backlight_dimmer
-    chmod 0660 /sys/module/mdss_fb/parameters/backlight_dimmer
-
     # FPS Info
     chown system graphics /sys/class/graphics/fb0/measured_fps
     chmod 0666 /sys/class/graphics/fb0/measured_fps
